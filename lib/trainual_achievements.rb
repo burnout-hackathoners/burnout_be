@@ -26,6 +26,6 @@ class TrainualAchievements
 
   def target_url
     user_id = @params[:user_id] || DEFAULT_USER_ID
-    "https%3A%2F%2Fapp.trainual-stg.com%2F2bf1edeb-fad6-43de-977c-85ac6142eaef%2Fajax%2Fusers%2F#{user_id}%2Ffetch_assigned_curriculums"
+    "https%3A%2F%2Fapp.trainual-stg.com/qa-team/ajax%2Fusers%2F#{user_id}%2Ffetch_assigned_curriculums"
   end
 end
