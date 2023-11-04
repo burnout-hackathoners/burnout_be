@@ -1,0 +1,38 @@
+version: '3.9'
+
+services:
+  web:
+    container_name: main_app
+    build: .
+    env_file: .env
+    image: main_app
+    restart: always
+    command: rails s -b 0.0.0.0
+    tty: true
+    stdin_open: true
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/app:rw
+      - data-bundle-burn:/bundle
+    depends_on:
+      - database
+
+  database:
+    container_name: database
+    image: postgres
+    restart: always
+    volumes:
+      - data-postgres-burn:/var/lib/postgresql/data
+    env_file: .env
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+      - POSTGRES_PASSWORD=example
+    ports:
+      - 5439:5432
+
+volumes:
+  data-postgres-burn:
+    driver: local
+  data-bundle-burn:
+    driver: local
