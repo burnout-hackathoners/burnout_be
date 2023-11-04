@@ -1,11 +1,9 @@
 class AchievementsPresenter
-  def present
-
+  def initialize(params)
+    @params = params
   end
 
-  private
-
-  def prepare_achievements_data
-
+  def collect_all
+    TrainualAchievements.new(@params).collect + ExternalAchievements.new(@params).collect
   end
 end
