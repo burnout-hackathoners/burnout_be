@@ -1,7 +1,7 @@
 class TrainualAchievements
   WEB_LINK_GENERATE_URL = 'https://api.trainual-stg.com/backend/v1/web-links/generate'
   DEFAULT_USER_ID = 205964
-  TOKEN = "Token token=EKWqV9gbXGfJJTTgs4q0r_YPWI4iJsztcTqgSRM_pGnWC-ybf_LabwIpjRjlAzcpwK33Ma2tnDfhx24pyiukMQ , email=domingodnls@gmail.com"
+  TOKEN = "Token token=EKWqV9gbXGfJJTTgs4q0r_YPWI4iJsztcTqgSRM_pGnWC-ybf_LabwIpjRjlAzcpwK33Ma2tnDfhx24pyiukMQ, email=domingodnls@gmail.com"
   HEADERS = { "accept" => "application/json", "authorization" => TOKEN }
 
   def initialize(params)
