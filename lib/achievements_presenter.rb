@@ -9,7 +9,7 @@ class AchievementsPresenter
   def generate_presentation
     all_achievements = collect_all_achievements
     completed_courses_count = calculate_completed_courses(all_achievements)
-    all_achievements + counted_achievements(completed_courses_count)
+    counted_achievements(completed_courses_count) + all_achievements
   end
 
   private
