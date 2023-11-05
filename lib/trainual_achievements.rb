@@ -38,7 +38,7 @@ class TrainualAchievements
     assigned_curriculums.map do |curriculum|
       random_icon = ICONS.keys.sample
       icon = curriculum[:completion_percentage] < 100 ? QUESTION_ICON : ICONS[random_icon]
-      curriculum.merge({ icon: icon })
+      curriculum.merge(icon: icon)
     end
   end
 
