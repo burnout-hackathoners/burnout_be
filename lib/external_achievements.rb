@@ -179,11 +179,11 @@ class ExternalAchievements
   end
 
   def collect
-    uniq_random_ids = RandomIdsGenerator.generate_uniq(1, 1000, FAKE_COURSES_DATA.size)
-    collected_achievements = FAKE_COURSES_DATA.map do |course|
+    limit = rand(1..20)
+    randomized_courses_data = FAKE_COURSES_DATA.sample(limit)
+    uniq_random_ids = RandomIdsGenerator.generate_uniq(1, 1000, randomized_courses_data.size)
+    randomized_courses_data.map do |course|
       course.merge(id: uniq_random_ids.shift, completion_percentage: 100)
     end
-    limit = rand(1..20)
-    collected_achievements.sample(limit)
   end
 end
