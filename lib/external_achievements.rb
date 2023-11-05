@@ -180,7 +180,9 @@ class ExternalAchievements
 
   def collect
     uniq_random_ids = generate_uniq_random_ids(FAKE_COURSES_DATA.size)
-    FAKE_COURSES_DATA.map { |course| course.merge(id: uniq_random_ids.shift) }
+    FAKE_COURSES_DATA.map do |course|
+      course.merge(id: uniq_random_ids.shift, completion_percentage: 100)
+    end
   end
 
   private
