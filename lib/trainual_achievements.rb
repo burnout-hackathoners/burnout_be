@@ -1,5 +1,6 @@
 class TrainualAchievements
   WEB_LINK_GENERATE_URL = 'https://api.trainual-stg.com/backend/v1/web-links/generate'
+  DEFAULT_ACCOUNT_ID = 'qa-team'
   DEFAULT_USER_ID = 205964
   TOKEN = "Token token=EKWqV9gbXGfJJTTgs4q0r_YPWI4iJsztcTqgSRM_pGnWC-ybf_LabwIpjRjlAzcpwK33Ma2tnDfhx24pyiukMQ, email=domingodnls@gmail.com"
   HEADERS = { "accept" => "application/json", "authorization" => TOKEN }
@@ -13,17 +14,15 @@ class TrainualAchievements
   end
 
   def collect
-    response_body = fetch_assigned_curriculums
-    assigned_curriculums = parse_response(response_body)
-    selected_curriculums = select_published_curriculums(assigned_curriculums)
-    assigned_curriculums_with_icons = add_icons(prepare_curriculums_data(selected_curriculums))
-    assigned_curriculums_with_icons
+    published_curriculums = select_published_curriculums(assigned_curriculums)
+    prepare_curriculums_data(published_curriculums)
   end
 
   private
 
-  def fetch_assigned_curriculums
-    Faraday.get(proxy_url).body
+  def assigned_curriculums
+    response_body = Faraday.get(assigned_curriculums_url_via_proxy).body
+    parse_response(response_body)
   end
 
   def parse_response(response_body)
@@ -34,27 +33,24 @@ class TrainualAchievements
     assigned_curriculums[:data].to_a.select { |curriculum| curriculum[:published] }
   end
 
-  def add_icons(assigned_curriculums)
-    assigned_curriculums.map do |curriculum|
+  def prepare_curriculums_data(curriculums)
+    curriculums.map do |curriculum|
       random_icon = ICONS.keys.sample
       icon = curriculum[:completion_percentage] < 100 ? QUESTION_ICON : ICONS[random_icon]
-      curriculum.merge(icon: icon)
+      curriculum.slice(:id, :title, :published, :completion_percentage).merge(icon: icon)
     end
   end
 
-  def prepare_curriculums_data(assigned_curriculums)
-    assigned_curriculums.map { |curriculum| curriculum.slice(:id, :title, :published, :completion_percentage) }
-  end
-
-  def proxy_url
-    url = "#{WEB_LINK_GENERATE_URL}?link=#{target_url}"
-    connection = Faraday.new(url: url)
+  def assigned_curriculums_url_via_proxy
+    proxy_url = "#{WEB_LINK_GENERATE_URL}?link=#{assigned_curriculums_url}"
+    connection = Faraday.new(url: proxy_url)
     response = connection.get { |req| req.headers = HEADERS }
     JSON.parse(response.body).fetch('web_link', '')
   end
 
-  def target_url
+  def assigned_curriculums_url
     user_id = @params[:user_id] || DEFAULT_USER_ID
-    "https%3A%2F%2Fapp.trainual-stg.com/qa-team/ajax%2Fusers%2F#{user_id}%2Ffetch_assigned_curriculums"
+    account_id = @params[:account_id] || DEFAULT_ACCOUNT_ID
+    "https%3A%2F%2Fapp.trainual-stg.com/#{account_id}/ajax%2Fusers%2F#{user_id}%2Ffetch_assigned_curriculums"
   end
 end
