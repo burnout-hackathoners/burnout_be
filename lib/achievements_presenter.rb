@@ -15,7 +15,7 @@ class AchievementsPresenter
   private
 
   def collect_all_achievements
-    TrainualAchievements.new(@params).collect + ExternalAchievements.new(@params).collect
+    TrainualAchievements.new(@params).collect + ExternalAchievements.new(@params).collect.first(10)
   end
 
   def calculate_completed_courses(all_achievements)
